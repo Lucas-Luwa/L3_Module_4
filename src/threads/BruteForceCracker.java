@@ -1,3 +1,5 @@
+package threads;
+
 // Below is a completed program that uses brute force to crack a 9-digit password. 
 // On average, the program takes about 0.125 seconds to find the password.
 // Your goal is to re-write the algorithm using Threads. Try to shorten the time it takes 
@@ -8,30 +10,65 @@
 
 import java.util.Random;
 
+import org.omg.IOP.Codec;
+
 public class BruteForceCracker {
-	static long code = (long)(new Random().nextDouble() * 1_000_000_000);
-	
+	static long code = (long) (new Random().nextDouble() * 1_000_000_000);
+
 	static long startTime;
 	static long endTime;
 	static float elapsedTime;
 	
 	public static void main(String[] args) {
 		System.out.println("Starting Brute Force Checker");
+		 Thread First = new Thread(() -> {
+			for (int i = 0; i < 250000000; i++) {
+				if (checkCode(i)) {
+					endTime = System.currentTimeMillis();
+				}
+			}
+		});
+		Thread Second = new Thread(() -> {
+			for (int i = 250000000; i < 500000000; i++) {
+				if (checkCode(i)) {
+					endTime = System.currentTimeMillis();
+				}
+			}
+		});
+		Thread Third = new Thread(() -> {
+			for (int i = 500000000; i < 750000000; i++) {
+				if (checkCode(i)) {
+					endTime = System.currentTimeMillis();
+				}
+			}
+		});
+		Thread Fourth = new Thread(() -> {
+			for (int i = 750000000; i < 1000000000; i++) {
+				if (checkCode(i)) {
+					endTime = System.currentTimeMillis();
+				}
+			}
+		});
+		
 		startTime = System.currentTimeMillis();
+		First.start();
+		Second.start();
+		Third.start();
+		Fourth.start();
 		
+
 		int ctr = 0;
-		while(!checkCode(ctr++));
-		
+
 		endTime = System.currentTimeMillis();
-		elapsedTime = (float)(endTime - startTime);
+		elapsedTime = (float) (endTime - startTime);
 		elapsedTime /= 1000.f;
 		System.out.println("Total time taken: " + elapsedTime + " seconds");
 	}
-	
-	public static boolean checkCode(long p){
-		if(p == code){
+
+	public static boolean checkCode(long p) {
+		if (p == code) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
